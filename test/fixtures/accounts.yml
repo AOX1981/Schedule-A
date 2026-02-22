@@ -1,0 +1,7 @@
+default:
+  user: default
+  nickname: "Chase Sapphire"
+  last4: "4242"
+  account_type: "credit_card"
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>

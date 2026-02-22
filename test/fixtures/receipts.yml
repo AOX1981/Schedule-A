@@ -1,0 +1,26 @@
+default:
+  user: default
+  business_profile: default
+  account: default
+  receipt_number: 1001
+  store_name: "Office Depot"
+  city: "Austin"
+  state: "TX"
+  transaction_date: "2026-02-15"
+  transaction_time: "14:30"
+  total_amount: 45.99
+  designation: "business"
+  source: "upload"
+  status: "confirmed"
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
+
+pending_receipt:
+  user: default
+  receipt_number: 1002
+  store_name: "Staples"
+  designation: "business"
+  source: "upload"
+  status: "pending"
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>

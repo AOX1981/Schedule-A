@@ -1,0 +1,25 @@
+default:
+  receipt: default
+  user: default
+  transaction_display_id: "1001.1"
+  line_number: 1
+  item: "Printer Paper"
+  cost: 12.99
+  tax_category: "office_expense"
+  writeoff_percent: 100.0
+  writeoff_value: 12.99
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
+
+second:
+  receipt: default
+  user: default
+  transaction_display_id: "1001.2"
+  line_number: 2
+  item: "Ink Cartridge"
+  cost: 32.99
+  tax_category: "supplies"
+  writeoff_percent: 100.0
+  writeoff_value: 32.99
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>

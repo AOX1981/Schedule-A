@@ -1,0 +1,13 @@
+default:
+  email: "test@example.com"
+  password_digest: <%= BCrypt::Password.create("password123") %>
+  full_name: "Test User"
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
+
+other:
+  email: "other@example.com"
+  password_digest: <%= BCrypt::Password.create("password123") %>
+  full_name: "Other User"
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>

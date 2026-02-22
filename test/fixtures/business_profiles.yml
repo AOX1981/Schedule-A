@@ -1,0 +1,8 @@
+default:
+  user: default
+  business_name: "Test Business LLC"
+  ein: "12-3456789"
+  business_type: "sole_proprietorship"
+  tax_year: 2026
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
