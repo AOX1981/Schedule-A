@@ -1,11 +1,13 @@
-<div class="auth-card">
-  <h1 class="auth-title"><i class="lucide-receipt"></i> Schedule A</h1>
-  <p class="auth-subtitle">Create your account to start tracking deductions</p>
+<div class="bg-white rounded-xl shadow-lg p-8">
+  <h1 class="text-2xl font-bold text-warm-800 text-center mb-1 flex items-center justify-center gap-2">
+    <i class="lucide-receipt text-warm-500 text-[28px]"></i> Schedule A
+  </h1>
+  <p class="text-center text-gray-500 text-sm mb-6">Create your account to start tracking deductions</p>
 
   <% if @user.errors.any? %>
-    <div class="form-errors">
+    <div class="bg-red-50 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm">
       <strong>Please fix the following:</strong>
-      <ul>
+      <ul class="mt-1 ml-5 list-disc">
         <% @user.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
         <% end %>
@@ -14,34 +16,50 @@
   <% end %>
 
   <%= form_with model: @user, url: register_path, method: :post, local: true do |f| %>
-    <div class="form-group">
-      <label class="form-label"><i class="lucide-user"></i> Full Name</label>
-      <%= f.text_field :full_name, class: "form-input", placeholder: "Jane Doe", required: true, autofocus: true %>
+    <div class="mb-4">
+      <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+        <i class="lucide-user text-[14px]"></i> Full Name
+      </label>
+      <%= f.text_field :full_name,
+        class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white transition focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20",
+        placeholder: "Jane Doe", required: true, autofocus: true %>
     </div>
 
-    <div class="form-group">
-      <label class="form-label"><i class="lucide-mail"></i> Email</label>
-      <%= f.email_field :email, class: "form-input", placeholder: "you@example.com", required: true %>
+    <div class="mb-4">
+      <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+        <i class="lucide-mail text-[14px]"></i> Email
+      </label>
+      <%= f.email_field :email,
+        class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white transition focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20",
+        placeholder: "you@example.com", required: true %>
     </div>
 
-    <div class="form-group">
-      <label class="form-label"><i class="lucide-lock"></i> Password</label>
-      <%= f.password_field :password, class: "form-input", placeholder: "At least 6 characters", required: true %>
+    <div class="mb-4">
+      <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+        <i class="lucide-lock text-[14px]"></i> Password
+      </label>
+      <%= f.password_field :password,
+        class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white transition focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20",
+        placeholder: "At least 6 characters", required: true %>
     </div>
 
-    <div class="form-group">
-      <label class="form-label"><i class="lucide-lock"></i> Confirm Password</label>
-      <%= f.password_field :password_confirmation, class: "form-input", placeholder: "Repeat your password", required: true %>
+    <div class="mb-4">
+      <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+        <i class="lucide-lock text-[14px]"></i> Confirm Password
+      </label>
+      <%= f.password_field :password_confirmation,
+        class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white transition focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20",
+        placeholder: "Repeat your password", required: true %>
     </div>
 
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary" style="width:100%; justify-content: center;">
+    <div class="mt-6">
+      <button type="submit" class="w-full flex items-center justify-center gap-2 bg-warm-600 hover:bg-warm-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors shadow-sm">
         <i class="lucide-user-plus"></i> Create Account
       </button>
     </div>
   <% end %>
 
-  <p class="auth-footer">
-    Already have an account? <a href="<%= login_path %>">Log in</a>
+  <p class="text-center mt-5 text-sm text-gray-500">
+    Already have an account? <a href="<%= login_path %>" class="text-warm-600 hover:text-warm-700 font-medium hover:underline">Log in</a>
   </p>
 </div>
