@@ -28,8 +28,13 @@ module Web
       if @receipt.save
         AuditLog.log!(user: current_user, auditable: @receipt, action: "create", ip_address: request.remote_ip)
         if @receipt.image.attached?
-          ReceiptExtractionService.new(@receipt).extract!
-          flash[:notice] = "Receipt uploaded and processed! Review the extracted data below."
+          extracted = ReceiptExtractionService.new(@receipt).extract!
+          @receipt.reload
+          if extracted.present? && extracted.except(:line_items).values.any?(&:present?)
+            flash[:notice] = "Receipt uploaded and processed! Review the extracted data below."
+          else
+            flash[:alert] = "Receipt uploaded but OCR could not extract data from this image. Please fill in the details manually."
+          end
         else
           flash[:notice] = "Receipt created successfully."
         end

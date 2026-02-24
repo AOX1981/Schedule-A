@@ -14,9 +14,11 @@ class ReceiptExtractionService
   end
 
   def extract!
-    return unless @receipt.image.attached?
+    return {} unless @receipt.image.attached?
 
     text = perform_ocr
+    Rails.logger.info("OCR for receipt #{@receipt.id}: extracted #{text.length} characters") if text.present?
+    Rails.logger.warn("OCR for receipt #{@receipt.id}: no text extracted from image") if text.blank?
     @receipt.update!(raw_ocr_text: text)
 
     extracted = parse_text(text)
