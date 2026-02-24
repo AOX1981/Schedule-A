@@ -22,6 +22,9 @@ gem "bootsnap", require: false
 # ActiveStorage image processing
 gem "image_processing", "~> 1.2"
 
+# OCR for receipt text extraction
+gem "rtesseract"
+
 # PDF generation
 gem "matrix" # required by prawn on Ruby 3.1+
 gem "prawn"

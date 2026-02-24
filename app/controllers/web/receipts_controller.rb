@@ -27,8 +27,12 @@ module Web
 
       if @receipt.save
         AuditLog.log!(user: current_user, auditable: @receipt, action: "create", ip_address: request.remote_ip)
-        ReceiptExtractionJob.perform_later(@receipt.id) if @receipt.image.attached?
-        flash[:notice] = "Receipt uploaded successfully."
+        if @receipt.image.attached?
+          ReceiptExtractionService.new(@receipt).extract!
+          flash[:notice] = "Receipt uploaded and processed! Review the extracted data below."
+        else
+          flash[:notice] = "Receipt created successfully."
+        end
         redirect_to web_receipt_path(@receipt)
       else
         flash.now[:alert] = "Please fix the errors below."

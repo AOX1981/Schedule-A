@@ -15,6 +15,54 @@
   </div>
 </div>
 
+<!-- Overview Stats -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <div class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-lg bg-warm-100 text-warm-600 flex items-center justify-center text-xl">
+      <i class="lucide-file-text"></i>
+    </div>
+    <div>
+      <div class="text-xs text-gray-500">Business Receipts</div>
+      <div class="text-xl font-bold text-gray-800"><%= @total_receipts %></div>
+    </div>
+  </div>
+  <div class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-lg bg-green-100 text-green-700 flex items-center justify-center text-xl">
+      <i class="lucide-check-circle"></i>
+    </div>
+    <div>
+      <div class="text-xs text-gray-500">Confirmed</div>
+      <div class="text-xl font-bold text-gray-800"><%= @confirmed_count %></div>
+    </div>
+  </div>
+  <div class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xl">
+      <i class="lucide-list"></i>
+    </div>
+    <div>
+      <div class="text-xs text-gray-500">Expense Lines</div>
+      <div class="text-xl font-bold text-gray-800"><%= @total_expense_lines %></div>
+    </div>
+  </div>
+  <div class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-lg bg-green-100 text-green-700 flex items-center justify-center text-xl">
+      <i class="lucide-calculator"></i>
+    </div>
+    <div>
+      <div class="text-xs text-gray-500">Total Deductions</div>
+      <div class="text-xl font-bold text-gray-800"><%= format_currency(@total_deductions) %></div>
+    </div>
+  </div>
+</div>
+
+<% if @pending_count > 0 %>
+  <div class="flex items-center gap-2.5 bg-warm-100 text-warm-800 text-sm font-medium px-4 py-3 rounded-lg mb-6">
+    <i class="lucide-alert-circle"></i>
+    You have <strong><%= @pending_count %></strong> unconfirmed business receipt<%= @pending_count == 1 ? "" : "s" %> for <%= @tax_year %>.
+    Confirm receipts from the <a href="<%= web_receipts_path(status: "pending") %>" class="text-warm-700 underline font-semibold">Receipts page</a> to include them in your summaries.
+  </div>
+<% end %>
+
 <!-- Schedule C Summary -->
 <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
   <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">

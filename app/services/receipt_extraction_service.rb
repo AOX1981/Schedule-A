@@ -1,9 +1,4 @@
 class ReceiptExtractionService
-  STORE_NAME_PATTERNS = [
-    /^(.+?)(?:\s+#\d+|\s+store)/i,
-    /^(.+?)(?:\n|\r)/
-  ].freeze
-
   DATE_PATTERNS = [
     /(\d{1,2}\/\d{1,2}\/\d{2,4})/,
     /(\d{4}-\d{2}-\d{2})/,
@@ -13,8 +8,6 @@ class ReceiptExtractionService
   TIME_PATTERNS = [
     /(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM)?)/i
   ].freeze
-
-  AMOUNT_PATTERN = /\$?\s*(\d+\.\d{2})/
 
   def initialize(receipt)
     @receipt = receipt
@@ -36,16 +29,62 @@ class ReceiptExtractionService
       status: "extracted"
     )
 
+    create_expense_lines(extracted[:line_items]) if extracted[:line_items].present?
+
     extracted
   end
 
   private
 
   def perform_ocr
-    # Server-side OCR placeholder
-    # In production, integrate with Tesseract, Google Vision, or AWS Textract
-    # For MVP, return stored raw text or empty string
-    @receipt.raw_ocr_text || ""
+    blob = @receipt.image.blob
+    tempfile = Tempfile.new(["receipt", extension_for(blob.content_type)])
+    begin
+      tempfile.binmode
+      tempfile.write(blob.download)
+      tempfile.rewind
+
+      if blob.content_type == "application/pdf"
+        extract_text_from_pdf(tempfile.path)
+      else
+        image = RTesseract.new(tempfile.path)
+        image.to_s.strip
+      end
+    ensure
+      tempfile.close
+      tempfile.unlink
+    end
+  rescue => e
+    Rails.logger.error("OCR failed for receipt #{@receipt.id}: #{e.message}")
+    ""
+  end
+
+  def extract_text_from_pdf(pdf_path)
+    # Convert first page of PDF to image, then OCR
+    png_temp = Tempfile.new(["receipt_page", ".png"])
+    begin
+      system("convert", "-density", "300", "#{pdf_path}[0]", "-quality", "100", png_temp.path)
+      if File.size?(png_temp.path)
+        image = RTesseract.new(png_temp.path)
+        image.to_s.strip
+      else
+        ""
+      end
+    ensure
+      png_temp.close
+      png_temp.unlink
+    end
+  end
+
+  def extension_for(content_type)
+    case content_type
+    when "image/jpeg" then ".jpg"
+    when "image/png" then ".png"
+    when "image/gif" then ".gif"
+    when "image/webp" then ".webp"
+    when "application/pdf" then ".pdf"
+    else ".jpg"
+    end
   end
 
   def parse_text(text)
@@ -87,7 +126,7 @@ class ReceiptExtractionService
   end
 
   def extract_total(text)
-    totals = text.scan(/(?:total|amount\s*due|balance)\s*:?\s*\$?\s*(\d+\.\d{2})/i)
+    totals = text.scan(/(?:total|amount\s*due|balance|grand\s*total)\s*:?\s*\$?\s*(\d+\.\d{2})/i)
     return nil if totals.empty?
     totals.last[0].to_f
   end
@@ -95,11 +134,26 @@ class ReceiptExtractionService
   def extract_line_items(text)
     items = []
     text.scan(/(.+?)\s+\$?\s*(\d+\.\d{2})/).each do |name, price|
-      name = name.strip
-      next if name.match?(/total|tax|subtotal|change|cash|credit|debit/i)
+      name = name.strip.gsub(/[^\w\s\-\/&]/, "").strip
+      next if name.match?(/total|tax|subtotal|change|cash|credit|debit|visa|mastercard|amex|balance|tendered/i)
       next if name.length < 2
       items << { item: name, cost: price.to_f }
     end
     items
+  end
+
+  def create_expense_lines(line_items)
+    return if line_items.blank?
+
+    line_items.each do |li|
+      @receipt.expense_lines.create!(
+        user: @receipt.user,
+        item: li[:item],
+        cost: li[:cost],
+        writeoff_percent: 100
+      )
+    rescue ActiveRecord::RecordInvalid => e
+      Rails.logger.warn("Could not create expense line: #{e.message}")
+    end
   end
 end

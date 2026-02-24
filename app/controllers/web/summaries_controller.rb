@@ -6,6 +6,17 @@ module Web
       @tax_year = (params[:tax_year] || Date.current.year).to_i
       scope = confirmed_lines
 
+      # Overview stats
+      year_receipts = current_user.receipts.where(designation: "business")
+      if @tax_year.present?
+        year_receipts = year_receipts.where(transaction_date: Date.new(@tax_year, 1, 1)..Date.new(@tax_year, 12, 31))
+      end
+      @total_receipts = year_receipts.count
+      @confirmed_count = year_receipts.where(status: "confirmed").count
+      @pending_count = year_receipts.where(status: %w[pending extracted]).count
+      @total_expense_lines = scope.count
+      @total_deductions = scope.sum(:writeoff_value).to_f.round(2)
+
       @by_category = scope.group(:tax_category)
         .select("tax_category, COUNT(*) as line_count, SUM(cost) as total_cost, SUM(writeoff_value) as total_writeoff")
         .reject { |s| s.tax_category.nil? }

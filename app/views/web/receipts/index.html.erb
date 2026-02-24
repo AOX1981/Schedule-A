@@ -43,11 +43,14 @@
             <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">#</th>
             <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Store</th>
             <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Date</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Location</th>
             <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Amount</th>
             <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Type</th>
             <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Status</th>
             <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Items</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Profile</th>
             <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Account</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Source</th>
           </tr>
         </thead>
         <tbody>
@@ -56,11 +59,14 @@
               <td class="px-3 py-2.5 border-b border-gray-200"><a href="<%= web_receipt_path(receipt) %>" class="text-warm-600 hover:text-warm-700 font-medium hover:underline"><%= receipt.receipt_number %></a></td>
               <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.store_name || "—" %></td>
               <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.transaction_date&.strftime("%b %d, %Y") || "—" %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= [receipt.city, receipt.state].compact.join(", ").presence || "—" %></td>
               <td class="px-3 py-2.5 border-b border-gray-200"><%= format_currency(receipt.total_amount) %></td>
               <td class="px-3 py-2.5 border-b border-gray-200"><%= designation_badge(receipt.designation) %></td>
               <td class="px-3 py-2.5 border-b border-gray-200"><%= status_badge(receipt.status) %></td>
               <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.expense_lines.size %></td>
-              <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.account&.last4 ? "••••#{receipt.account.last4}" : "—" %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.business_profile&.business_name || "—" %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.account ? "#{receipt.account.nickname} (••••#{receipt.account.last4})" : "—" %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.source.titleize %></td>
             </tr>
           <% end %>
         </tbody>
