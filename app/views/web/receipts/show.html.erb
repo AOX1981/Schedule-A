@@ -5,14 +5,14 @@
   </h1>
   <div class="flex items-center gap-2">
     <% if @receipt.status != "confirmed" %>
-      <%= link_to confirm_web_receipt_path(@receipt), method: :post, class: "inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-500 hover:bg-green-700 text-white text-sm font-medium rounded-lg no-underline transition-colors", data: { turbo_method: :post } do %>
+      <%= button_to confirm_web_receipt_path(@receipt), method: :post, class: "inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-500 hover:bg-green-700 text-white text-sm font-medium rounded-lg border-0 cursor-pointer transition-colors" do %>
         <i class="lucide-check-circle text-sm"></i> Confirm
       <% end %>
     <% end %>
     <a href="<%= edit_web_receipt_path(@receipt) %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg border border-gray-300 no-underline transition-colors">
       <i class="lucide-edit text-sm"></i> Edit
     </a>
-    <%= link_to web_receipt_path(@receipt), method: :delete, class: "inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-500 hover:bg-red-700 text-white text-sm font-medium rounded-lg no-underline transition-colors", data: { turbo_method: :delete, turbo_confirm: "Delete this receipt and all its expense lines?" } do %>
+    <%= button_to web_receipt_path(@receipt), method: :delete, class: "inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-500 hover:bg-red-700 text-white text-sm font-medium rounded-lg border-0 cursor-pointer transition-colors", data: { turbo_confirm: "Delete this receipt and all its expense lines?" } do %>
       <i class="lucide-trash-2 text-sm"></i> Delete
     <% end %>
   </div>
@@ -100,11 +100,11 @@
               <td class="px-3 py-2.5 border-b border-gray-200"><%= category_label(line.tax_category) %></td>
               <td class="px-3 py-2.5 border-b border-gray-200"><%= line.writeoff_percent %>%</td>
               <td class="px-3 py-2.5 border-b border-gray-200"><%= format_currency(line.writeoff_value) %></td>
-              <td class="px-3 py-2.5 border-b border-gray-200 whitespace-nowrap">
+              <td class="px-3 py-2.5 border-b border-gray-200 whitespace-nowrap flex items-center gap-1">
                 <a href="<%= edit_web_receipt_expense_line_path(@receipt, line) %>" class="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded border border-gray-300 no-underline transition-colors">
                   <i class="lucide-edit text-xs"></i>
                 </a>
-                <%= link_to web_receipt_expense_line_path(@receipt, line), method: :delete, class: "inline-flex items-center gap-1 px-2 py-1 bg-red-500 hover:bg-red-700 text-white text-xs font-medium rounded no-underline transition-colors", data: { turbo_method: :delete, turbo_confirm: "Remove this expense line?" } do %>
+                <%= button_to web_receipt_expense_line_path(@receipt, line), method: :delete, class: "inline-flex items-center gap-1 px-2 py-1 bg-red-500 hover:bg-red-700 text-white text-xs font-medium rounded border-0 cursor-pointer transition-colors", data: { turbo_confirm: "Remove this expense line?" } do %>
                   <i class="lucide-trash-2 text-xs"></i>
                 <% end %>
               </td>

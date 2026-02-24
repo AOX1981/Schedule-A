@@ -39,7 +39,7 @@
                 <a href="<%= edit_web_business_profile_path(profile) %>" class="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded border border-gray-300 no-underline transition-colors">
                   <i class="lucide-edit text-xs"></i>
                 </a>
-                <%= link_to web_business_profile_path(profile), method: :delete, class: "inline-flex items-center gap-1 px-2 py-1 bg-red-500 hover:bg-red-700 text-white text-xs font-medium rounded no-underline transition-colors", data: { turbo_method: :delete, turbo_confirm: "Delete this business profile?" } do %>
+                <%= button_to web_business_profile_path(profile), method: :delete, class: "inline-flex items-center gap-1 px-2 py-1 bg-red-500 hover:bg-red-700 text-white text-xs font-medium rounded border-0 cursor-pointer transition-colors", data: { turbo_confirm: "Delete this business profile?" } do %>
                   <i class="lucide-trash-2 text-xs"></i>
                 <% end %>
               </td>
@@ -91,7 +91,7 @@
                 <a href="<%= edit_web_account_path(acct) %>" class="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded border border-gray-300 no-underline transition-colors">
                   <i class="lucide-edit text-xs"></i>
                 </a>
-                <%= link_to web_account_path(acct), method: :delete, class: "inline-flex items-center gap-1 px-2 py-1 bg-red-500 hover:bg-red-700 text-white text-xs font-medium rounded no-underline transition-colors", data: { turbo_method: :delete, turbo_confirm: "Remove this account?" } do %>
+                <%= button_to web_account_path(acct), method: :delete, class: "inline-flex items-center gap-1 px-2 py-1 bg-red-500 hover:bg-red-700 text-white text-xs font-medium rounded border-0 cursor-pointer transition-colors", data: { turbo_confirm: "Remove this account?" } do %>
                   <i class="lucide-trash-2 text-xs"></i>
                 <% end %>
               </td>

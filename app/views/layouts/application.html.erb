@@ -52,7 +52,7 @@
         </div>
         <div class="flex items-center gap-4 ml-auto">
           <span class="text-warm-200 text-sm flex items-center gap-1.5"><i class="lucide-user text-sm"></i> <%= current_user.full_name %></span>
-          <%= link_to logout_path, data: { turbo_method: :delete }, class: "flex items-center gap-1.5 text-warm-300 hover:text-red-400 text-sm font-medium no-underline transition-colors" do %>
+          <%= button_to logout_path, method: :delete, class: "flex items-center gap-1.5 text-warm-300 hover:text-red-400 text-sm font-medium bg-transparent border-0 cursor-pointer transition-colors" do %>
             <i class="lucide-log-out text-sm"></i> Log out
           <% end %>
         </div>
