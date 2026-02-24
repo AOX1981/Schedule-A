@@ -1,12 +1,15 @@
-<div class="page-header">
-  <h1 class="page-title"><i class="lucide-edit"></i> Edit Expense Line <%= @expense_line.transaction_display_id %></h1>
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-warm-900 flex items-center gap-2.5">
+    <i class="lucide-edit text-warm-500 text-[26px]"></i> Edit Expense Line <%= @expense_line.transaction_display_id %>
+  </h1>
 </div>
 
-<div class="card">
+<div class="bg-white rounded-lg shadow-sm p-6">
   <% if @expense_line.errors.any? %>
-    <div class="form-errors">
+    <div class="bg-red-50 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm">
       <strong>Please fix the following:</strong>
-      <ul>
+      <ul class="mt-1 ml-5 list-disc">
         <% @expense_line.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
         <% end %>
@@ -15,29 +18,33 @@
   <% end %>
 
   <%= form_with model: @expense_line, url: web_receipt_expense_line_path(@receipt, @expense_line), method: :patch, local: true do |f| %>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Item</label>
-        <%= f.text_field :item, class: "form-input", required: true %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Item</label>
+        <%= f.text_field :item, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition", required: true %>
       </div>
-      <div class="form-group">
-        <label class="form-label">Cost</label>
-        <%= f.number_field :cost, class: "form-input", step: "0.01", min: "0", required: true %>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Tax Category</label>
-        <%= f.select :tax_category, ExpenseLine::SCHEDULE_C_CATEGORIES.keys.map { |k| [k.titleize, k] }, { include_blank: "— None —" }, class: "form-select" %>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Write-off %</label>
-        <%= f.number_field :writeoff_percent, class: "form-input", min: 0, max: 100, step: "0.01" %>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Cost</label>
+        <%= f.number_field :cost, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition", step: "0.01", min: "0", required: true %>
       </div>
     </div>
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary"><i class="lucide-save"></i> Save</button>
-      <a href="<%= web_receipt_path(@receipt) %>" class="btn btn-secondary"><i class="lucide-x"></i> Cancel</a>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Tax Category</label>
+        <%= f.select :tax_category, ExpenseLine::SCHEDULE_C_CATEGORIES.keys.map { |k| [k.titleize, k] }, { include_blank: "— None —" }, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition" %>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Write-off %</label>
+        <%= f.number_field :writeoff_percent, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition", min: 0, max: 100, step: "0.01" %>
+      </div>
+    </div>
+    <div class="flex items-center gap-2.5 mt-5">
+      <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors">
+        <i class="lucide-save text-sm"></i> Save
+      </button>
+      <a href="<%= web_receipt_path(@receipt) %>" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg border border-gray-300 no-underline transition-colors">
+        <i class="lucide-x text-sm"></i> Cancel
+      </a>
     </div>
   <% end %>
 </div>

@@ -1,31 +1,37 @@
 <% if profile.errors.any? %>
-  <div class="form-errors">
+  <div class="bg-red-50 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm">
     <strong>Please fix the following:</strong>
-    <ul><% profile.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %></ul>
+    <ul class="mt-1 ml-5 list-disc">
+      <% profile.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+    </ul>
   </div>
 <% end %>
 
 <%= form_with model: profile, url: url, method: profile.persisted? ? :patch : :post, local: true do |f| %>
-  <div class="form-group">
-    <label class="form-label"><i class="lucide-building"></i> Business Name</label>
-    <%= f.text_field :business_name, class: "form-input", placeholder: "e.g. Jane's Consulting LLC", required: true %>
+  <div class="mb-4">
+    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-building text-sm"></i> Business Name</label>
+    <%= f.text_field :business_name, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition", placeholder: "e.g. Jane's Consulting LLC", required: true %>
   </div>
-  <div class="form-row">
-    <div class="form-group">
-      <label class="form-label"><i class="lucide-hash"></i> EIN (optional)</label>
-      <%= f.text_field :ein, class: "form-input", placeholder: "XX-XXXXXXX" %>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-hash text-sm"></i> EIN (optional)</label>
+      <%= f.text_field :ein, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition", placeholder: "XX-XXXXXXX" %>
     </div>
-    <div class="form-group">
-      <label class="form-label"><i class="lucide-tag"></i> Business Type</label>
-      <%= f.select :business_type, [["Sole Proprietorship", "sole_proprietorship"], ["Single Member LLC", "single_member_llc"]], {}, class: "form-select" %>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-tag text-sm"></i> Business Type</label>
+      <%= f.select :business_type, [["Sole Proprietorship", "sole_proprietorship"], ["Single Member LLC", "single_member_llc"]], {}, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition" %>
     </div>
-    <div class="form-group">
-      <label class="form-label"><i class="lucide-calendar"></i> Tax Year</label>
-      <%= f.number_field :tax_year, class: "form-input", min: 2020, max: 2099, required: true %>
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-calendar text-sm"></i> Tax Year</label>
+      <%= f.number_field :tax_year, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition", min: 2020, max: 2099, required: true %>
     </div>
   </div>
-  <div class="form-actions">
-    <button type="submit" class="btn btn-primary"><i class="lucide-save"></i> Save</button>
-    <a href="<%= web_settings_path %>" class="btn btn-secondary"><i class="lucide-x"></i> Cancel</a>
+  <div class="flex items-center gap-2.5 mt-5">
+    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors">
+      <i class="lucide-save text-sm"></i> Save
+    </button>
+    <a href="<%= web_settings_path %>" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg border border-gray-300 no-underline transition-colors">
+      <i class="lucide-x text-sm"></i> Cancel
+    </a>
   </div>
 <% end %>

@@ -1,7 +1,7 @@
 <% if receipt.errors.any? %>
-  <div class="form-errors">
+  <div class="bg-red-50 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm">
     <strong>Please fix the following:</strong>
-    <ul>
+    <ul class="mt-1 ml-5 list-disc">
       <% receipt.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
@@ -9,50 +9,50 @@
   </div>
 <% end %>
 
-<div class="form-row">
-  <div class="form-group">
-    <label class="form-label"><i class="lucide-store"></i> Store Name</label>
-    <%= f.text_field :store_name, class: "form-input", placeholder: "e.g. Office Depot" %>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <div>
+    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-store text-sm"></i> Store Name</label>
+    <%= f.text_field :store_name, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition", placeholder: "e.g. Office Depot" %>
   </div>
-  <div class="form-group">
-    <label class="form-label"><i class="lucide-calendar"></i> Date</label>
-    <%= f.date_field :transaction_date, class: "form-input" %>
-  </div>
-</div>
-
-<div class="form-row">
-  <div class="form-group">
-    <label class="form-label"><i class="lucide-map-pin"></i> City</label>
-    <%= f.text_field :city, class: "form-input", placeholder: "e.g. Austin" %>
-  </div>
-  <div class="form-group">
-    <label class="form-label"><i class="lucide-map"></i> State</label>
-    <%= f.text_field :state, class: "form-input", placeholder: "e.g. TX" %>
-  </div>
-  <div class="form-group">
-    <label class="form-label"><i class="lucide-clock"></i> Time</label>
-    <%= f.text_field :transaction_time, class: "form-input", placeholder: "14:30" %>
+  <div>
+    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-calendar text-sm"></i> Date</label>
+    <%= f.date_field :transaction_date, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition" %>
   </div>
 </div>
 
-<div class="form-row">
-  <div class="form-group">
-    <label class="form-label"><i class="lucide-dollar-sign"></i> Total Amount</label>
-    <%= f.number_field :total_amount, class: "form-input", step: "0.01", min: "0", placeholder: "0.00" %>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+  <div>
+    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-map-pin text-sm"></i> City</label>
+    <%= f.text_field :city, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition", placeholder: "e.g. Austin" %>
   </div>
-  <div class="form-group">
-    <label class="form-label"><i class="lucide-tag"></i> Designation</label>
-    <%= f.select :designation, [["Business", "business"], ["Personal", "personal"]], {}, class: "form-select" %>
+  <div>
+    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-map text-sm"></i> State</label>
+    <%= f.text_field :state, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition", placeholder: "e.g. TX" %>
+  </div>
+  <div>
+    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-clock text-sm"></i> Time</label>
+    <%= f.text_field :transaction_time, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition", placeholder: "14:30" %>
   </div>
 </div>
 
-<div class="form-row">
-  <div class="form-group">
-    <label class="form-label"><i class="lucide-briefcase"></i> Business Profile</label>
-    <%= f.collection_select :business_profile_id, current_user.business_profiles.order(:business_name), :id, :business_name, { include_blank: "— Select —" }, class: "form-select" %>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+  <div>
+    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-dollar-sign text-sm"></i> Total Amount</label>
+    <%= f.number_field :total_amount, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition", step: "0.01", min: "0", placeholder: "0.00" %>
   </div>
-  <div class="form-group">
-    <label class="form-label"><i class="lucide-credit-card"></i> Account</label>
-    <%= f.collection_select :account_id, current_user.accounts.order(:nickname), :id, proc { |a| "#{a.nickname} (••••#{a.last4})" }, { include_blank: "— Select —" }, class: "form-select" %>
+  <div>
+    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-tag text-sm"></i> Designation</label>
+    <%= f.select :designation, [["Business", "business"], ["Personal", "personal"]], {}, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition" %>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+  <div>
+    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-briefcase text-sm"></i> Business Profile</label>
+    <%= f.collection_select :business_profile_id, current_user.business_profiles.order(:business_name), :id, :business_name, { include_blank: "— Select —" }, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition" %>
+  </div>
+  <div>
+    <label class="block text-sm font-semibold text-gray-700 mb-1"><i class="lucide-credit-card text-sm"></i> Account</label>
+    <%= f.collection_select :account_id, current_user.accounts.order(:nickname), :id, proc { |a| "#{a.nickname} (••••#{a.last4})" }, { include_blank: "— Select —" }, class: "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-800 bg-white focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20 transition" %>
   </div>
 </div>

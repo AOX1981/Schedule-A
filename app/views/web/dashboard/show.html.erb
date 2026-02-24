@@ -1,80 +1,101 @@
-<div class="page-header">
-  <h1 class="page-title"><i class="lucide-layout-dashboard"></i> Dashboard</h1>
-  <a href="<%= new_web_receipt_path %>" class="btn btn-primary"><i class="lucide-plus"></i> New Receipt</a>
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-warm-900 flex items-center gap-2.5">
+    <i class="lucide-layout-dashboard text-warm-500 text-[26px]"></i> Dashboard
+  </h1>
+  <a href="<%= new_web_receipt_path %>" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors no-underline">
+    <i class="lucide-plus text-base"></i> New Receipt
+  </a>
 </div>
 
-<div class="stats-grid">
-  <div class="stat-card">
-    <div class="stat-icon stat-icon-warm"><i class="lucide-file-text"></i></div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <div class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-lg bg-warm-100 text-warm-600 flex items-center justify-center text-xl">
+      <i class="lucide-file-text"></i>
+    </div>
     <div>
-      <div class="stat-label">Total Receipts</div>
-      <div class="stat-value"><%= @total_receipts %></div>
+      <div class="text-xs text-gray-500">Total Receipts</div>
+      <div class="text-xl font-bold text-gray-800"><%= @total_receipts %></div>
     </div>
   </div>
 
-  <div class="stat-card">
-    <div class="stat-icon stat-icon-blue"><i class="lucide-clock"></i></div>
+  <div class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xl">
+      <i class="lucide-clock"></i>
+    </div>
     <div>
-      <div class="stat-label">Pending Review</div>
-      <div class="stat-value"><%= @pending_count %></div>
+      <div class="text-xs text-gray-500">Pending Review</div>
+      <div class="text-xl font-bold text-gray-800"><%= @pending_count %></div>
     </div>
   </div>
 
-  <div class="stat-card">
-    <div class="stat-icon stat-icon-green"><i class="lucide-calculator"></i></div>
+  <div class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-lg bg-green-100 text-green-700 flex items-center justify-center text-xl">
+      <i class="lucide-calculator"></i>
+    </div>
     <div>
-      <div class="stat-label">Total Deductions</div>
-      <div class="stat-value"><%= format_currency(@total_deductions) %></div>
+      <div class="text-xs text-gray-500">Total Deductions</div>
+      <div class="text-xl font-bold text-gray-800"><%= format_currency(@total_deductions) %></div>
     </div>
   </div>
 
-  <div class="stat-card">
-    <div class="stat-icon stat-icon-warm"><i class="lucide-list"></i></div>
+  <div class="bg-white rounded-lg shadow-sm p-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-lg bg-warm-100 text-warm-600 flex items-center justify-center text-xl">
+      <i class="lucide-list"></i>
+    </div>
     <div>
-      <div class="stat-label">Expense Lines</div>
-      <div class="stat-value"><%= @expense_count %></div>
+      <div class="text-xs text-gray-500">Expense Lines</div>
+      <div class="text-xl font-bold text-gray-800"><%= @expense_count %></div>
     </div>
   </div>
 </div>
 
-<div class="card">
-  <div class="card-header">
-    <h2 class="card-title"><i class="lucide-history"></i> Recent Receipts</h2>
-    <a href="<%= web_receipts_path %>" class="btn btn-secondary btn-sm"><i class="lucide-arrow-right"></i> View All</a>
+<!-- Recent Receipts -->
+<div class="bg-white rounded-lg shadow-sm p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+      <i class="lucide-history text-warm-500"></i> Recent Receipts
+    </h2>
+    <a href="<%= web_receipts_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg border border-gray-300 no-underline transition-colors">
+      <i class="lucide-arrow-right text-sm"></i> View All
+    </a>
   </div>
 
   <% if @recent_receipts.any? %>
-    <div class="table-wrapper">
-      <table>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Store</th>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Items</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">#</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Store</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Date</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Amount</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Status</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Items</th>
           </tr>
         </thead>
         <tbody>
           <% @recent_receipts.each do |receipt| %>
-            <tr>
-              <td><a href="<%= web_receipt_path(receipt) %>"><%= receipt.receipt_number %></a></td>
-              <td><%= receipt.store_name || "—" %></td>
-              <td><%= receipt.transaction_date&.strftime("%b %d, %Y") || "—" %></td>
-              <td><%= format_currency(receipt.total_amount) %></td>
-              <td><%= status_badge(receipt.status) %></td>
-              <td><%= receipt.expense_lines.size %></td>
+            <tr class="hover:bg-warm-50 transition-colors">
+              <td class="px-3 py-2.5 border-b border-gray-200"><a href="<%= web_receipt_path(receipt) %>" class="text-warm-600 hover:text-warm-700 font-medium hover:underline"><%= receipt.receipt_number %></a></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.store_name || "—" %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.transaction_date&.strftime("%b %d, %Y") || "—" %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= format_currency(receipt.total_amount) %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= status_badge(receipt.status) %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.expense_lines.size %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
   <% else %>
-    <div class="empty-state">
-      <i class="lucide-inbox"></i>
-      <p>No receipts yet. Upload your first receipt to get started!</p>
-      <a href="<%= new_web_receipt_path %>" class="btn btn-primary"><i class="lucide-plus"></i> Upload Receipt</a>
+    <div class="text-center py-12 text-gray-400">
+      <i class="lucide-inbox text-5xl text-warm-300 block mb-3"></i>
+      <p class="text-base mb-4">No receipts yet. Upload your first receipt to get started!</p>
+      <a href="<%= new_web_receipt_path %>" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-semibold rounded-lg shadow-sm no-underline transition-colors">
+        <i class="lucide-plus"></i> Upload Receipt
+      </a>
     </div>
   <% end %>
 </div>

@@ -1,37 +1,46 @@
-<div class="page-header">
-  <h1 class="page-title"><i class="lucide-settings"></i> Settings</h1>
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-warm-900 flex items-center gap-2.5">
+    <i class="lucide-settings text-warm-500 text-[26px]"></i> Settings
+  </h1>
 </div>
 
 <!-- Business Profiles -->
-<div class="card">
-  <div class="card-header">
-    <h2 class="card-title"><i class="lucide-briefcase"></i> Business Profiles</h2>
-    <a href="<%= new_web_business_profile_path %>" class="btn btn-primary btn-sm"><i class="lucide-plus"></i> Add Profile</a>
+<div class="bg-white rounded-lg shadow-sm p-6 mb-5">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+      <i class="lucide-briefcase text-warm-500"></i> Business Profiles
+    </h2>
+    <a href="<%= new_web_business_profile_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-medium rounded-lg shadow-sm no-underline transition-colors">
+      <i class="lucide-plus text-sm"></i> Add Profile
+    </a>
   </div>
 
   <% if @profiles.any? %>
-    <div class="table-wrapper">
-      <table>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
         <thead>
           <tr>
-            <th>Business Name</th>
-            <th>EIN</th>
-            <th>Type</th>
-            <th>Tax Year</th>
-            <th></th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Business Name</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">EIN</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Type</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Tax Year</th>
+            <th class="px-3 py-2.5 bg-warm-100 border-b-2 border-warm-200"></th>
           </tr>
         </thead>
         <tbody>
           <% @profiles.each do |profile| %>
-            <tr>
-              <td><%= profile.business_name %></td>
-              <td><%= profile.ein || "—" %></td>
-              <td><%= profile.business_type.titleize %></td>
-              <td><%= profile.tax_year %></td>
-              <td style="white-space:nowrap;">
-                <a href="<%= edit_web_business_profile_path(profile) %>" class="btn btn-secondary btn-sm"><i class="lucide-edit"></i></a>
-                <%= link_to web_business_profile_path(profile), method: :delete, class: "btn btn-danger btn-sm", data: { turbo_method: :delete, turbo_confirm: "Delete this business profile?" } do %>
-                  <i class="lucide-trash-2"></i>
+            <tr class="hover:bg-warm-50 transition-colors">
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= profile.business_name %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= profile.ein || "—" %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= profile.business_type.titleize %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= profile.tax_year %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200 whitespace-nowrap">
+                <a href="<%= edit_web_business_profile_path(profile) %>" class="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded border border-gray-300 no-underline transition-colors">
+                  <i class="lucide-edit text-xs"></i>
+                </a>
+                <%= link_to web_business_profile_path(profile), method: :delete, class: "inline-flex items-center gap-1 px-2 py-1 bg-red-500 hover:bg-red-700 text-white text-xs font-medium rounded no-underline transition-colors", data: { turbo_method: :delete, turbo_confirm: "Delete this business profile?" } do %>
+                  <i class="lucide-trash-2 text-xs"></i>
                 <% end %>
               </td>
             </tr>
@@ -40,42 +49,50 @@
       </table>
     </div>
   <% else %>
-    <div class="empty-state">
-      <i class="lucide-briefcase"></i>
-      <p>No business profiles yet.</p>
-      <a href="<%= new_web_business_profile_path %>" class="btn btn-primary btn-sm"><i class="lucide-plus"></i> Add Profile</a>
+    <div class="text-center py-12 text-gray-400">
+      <i class="lucide-briefcase text-5xl text-warm-300 block mb-3"></i>
+      <p class="text-base mb-4">No business profiles yet.</p>
+      <a href="<%= new_web_business_profile_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-medium rounded-lg shadow-sm no-underline transition-colors">
+        <i class="lucide-plus text-sm"></i> Add Profile
+      </a>
     </div>
   <% end %>
 </div>
 
 <!-- Accounts -->
-<div class="card">
-  <div class="card-header">
-    <h2 class="card-title"><i class="lucide-credit-card"></i> Payment Accounts</h2>
-    <a href="<%= new_web_account_path %>" class="btn btn-primary btn-sm"><i class="lucide-plus"></i> Add Account</a>
+<div class="bg-white rounded-lg shadow-sm p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+      <i class="lucide-credit-card text-warm-500"></i> Payment Accounts
+    </h2>
+    <a href="<%= new_web_account_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-medium rounded-lg shadow-sm no-underline transition-colors">
+      <i class="lucide-plus text-sm"></i> Add Account
+    </a>
   </div>
 
   <% if @accounts.any? %>
-    <div class="table-wrapper">
-      <table>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
         <thead>
           <tr>
-            <th>Nickname</th>
-            <th>Last 4</th>
-            <th>Type</th>
-            <th></th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Nickname</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Last 4</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Type</th>
+            <th class="px-3 py-2.5 bg-warm-100 border-b-2 border-warm-200"></th>
           </tr>
         </thead>
         <tbody>
           <% @accounts.each do |acct| %>
-            <tr>
-              <td><%= acct.nickname %></td>
-              <td>••••<%= acct.last4 %></td>
-              <td><%= acct.account_type.titleize %></td>
-              <td style="white-space:nowrap;">
-                <a href="<%= edit_web_account_path(acct) %>" class="btn btn-secondary btn-sm"><i class="lucide-edit"></i></a>
-                <%= link_to web_account_path(acct), method: :delete, class: "btn btn-danger btn-sm", data: { turbo_method: :delete, turbo_confirm: "Remove this account?" } do %>
-                  <i class="lucide-trash-2"></i>
+            <tr class="hover:bg-warm-50 transition-colors">
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= acct.nickname %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= acct.last4 %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= acct.account_type.titleize %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200 whitespace-nowrap">
+                <a href="<%= edit_web_account_path(acct) %>" class="inline-flex items-center gap-1 px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded border border-gray-300 no-underline transition-colors">
+                  <i class="lucide-edit text-xs"></i>
+                </a>
+                <%= link_to web_account_path(acct), method: :delete, class: "inline-flex items-center gap-1 px-2 py-1 bg-red-500 hover:bg-red-700 text-white text-xs font-medium rounded no-underline transition-colors", data: { turbo_method: :delete, turbo_confirm: "Remove this account?" } do %>
+                  <i class="lucide-trash-2 text-xs"></i>
                 <% end %>
               </td>
             </tr>
@@ -84,10 +101,12 @@
       </table>
     </div>
   <% else %>
-    <div class="empty-state">
-      <i class="lucide-credit-card"></i>
-      <p>No accounts yet.</p>
-      <a href="<%= new_web_account_path %>" class="btn btn-primary btn-sm"><i class="lucide-plus"></i> Add Account</a>
+    <div class="text-center py-12 text-gray-400">
+      <i class="lucide-credit-card text-5xl text-warm-300 block mb-3"></i>
+      <p class="text-base mb-4">No accounts yet.</p>
+      <a href="<%= new_web_account_path %>" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-medium rounded-lg shadow-sm no-underline transition-colors">
+        <i class="lucide-plus text-sm"></i> Add Account
+      </a>
     </div>
   <% end %>
 </div>

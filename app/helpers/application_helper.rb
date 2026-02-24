@@ -5,18 +5,18 @@ module ApplicationHelper
   end
 
   def status_badge(status)
-    klass = case status
-            when "pending" then "badge-pending"
-            when "extracted" then "badge-extracted"
-            when "confirmed" then "badge-confirmed"
-            else "badge-pending"
-            end
-    "<span class=\"badge #{klass}\">#{status.capitalize}</span>".html_safe
+    classes = case status
+              when "pending"   then "bg-warm-100 text-warm-700"
+              when "extracted" then "bg-blue-100 text-blue-700"
+              when "confirmed" then "bg-green-100 text-green-700"
+              else "bg-warm-100 text-warm-700"
+              end
+    "<span class=\"inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold #{classes}\">#{status.capitalize}</span>".html_safe
   end
 
   def designation_badge(designation)
-    klass = designation == "business" ? "badge-business" : "badge-personal"
-    "<span class=\"badge #{klass}\">#{designation.capitalize}</span>".html_safe
+    classes = designation == "business" ? "bg-warm-100 text-warm-700" : "bg-gray-100 text-gray-600"
+    "<span class=\"inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold #{classes}\">#{designation.capitalize}</span>".html_safe
   end
 
   def category_label(key)

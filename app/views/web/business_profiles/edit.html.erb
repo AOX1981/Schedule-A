@@ -1,6 +1,8 @@
-<div class="page-header">
-  <h1 class="page-title"><i class="lucide-edit"></i> Edit Business Profile</h1>
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-warm-900 flex items-center gap-2.5">
+    <i class="lucide-edit text-warm-500 text-[26px]"></i> Edit Business Profile
+  </h1>
 </div>
-<div class="card">
+<div class="bg-white rounded-lg shadow-sm p-6">
   <%= render "form", profile: @profile, url: web_business_profile_path(@profile) %>
 </div>

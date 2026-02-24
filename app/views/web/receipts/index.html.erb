@@ -1,65 +1,78 @@
-<div class="page-header">
-  <h1 class="page-title"><i class="lucide-file-text"></i> Receipts</h1>
-  <a href="<%= new_web_receipt_path %>" class="btn btn-primary"><i class="lucide-plus"></i> Upload Receipt</a>
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-warm-900 flex items-center gap-2.5">
+    <i class="lucide-file-text text-warm-500 text-[26px]"></i> Receipts
+  </h1>
+  <a href="<%= new_web_receipt_path %>" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors no-underline">
+    <i class="lucide-plus text-base"></i> Upload Receipt
+  </a>
 </div>
 
-<div class="card" style="margin-bottom: 16px; padding: 12px 16px;">
-  <%= form_with url: web_receipts_path, method: :get, local: true, style: "display:flex; gap:12px; align-items:center; flex-wrap:wrap;" do %>
-    <select name="status" class="form-select" style="width:auto;">
+<!-- Filters -->
+<div class="bg-white rounded-lg shadow-sm px-4 py-3 mb-4">
+  <%= form_with url: web_receipts_path, method: :get, local: true, class: "flex items-center gap-3 flex-wrap" do %>
+    <select name="status" class="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-800 focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20">
       <option value="">All Statuses</option>
       <% %w[pending extracted confirmed].each do |s| %>
         <option value="<%= s %>" <%= 'selected' if params[:status] == s %>><%= s.capitalize %></option>
       <% end %>
     </select>
-    <select name="designation" class="form-select" style="width:auto;">
+    <select name="designation" class="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-800 focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20">
       <option value="">All Types</option>
       <option value="business" <%= 'selected' if params[:designation] == 'business' %>>Business</option>
       <option value="personal" <%= 'selected' if params[:designation] == 'personal' %>>Personal</option>
     </select>
-    <button type="submit" class="btn btn-secondary btn-sm"><i class="lucide-filter"></i> Filter</button>
+    <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg border border-gray-300 transition-colors">
+      <i class="lucide-filter text-sm"></i> Filter
+    </button>
     <% if params[:status].present? || params[:designation].present? %>
-      <a href="<%= web_receipts_path %>" class="btn btn-secondary btn-sm"><i class="lucide-x"></i> Clear</a>
+      <a href="<%= web_receipts_path %>" class="inline-flex items-center gap-1.5 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg border border-gray-300 no-underline transition-colors">
+        <i class="lucide-x text-sm"></i> Clear
+      </a>
     <% end %>
   <% end %>
 </div>
 
-<div class="card">
+<!-- Receipts Table -->
+<div class="bg-white rounded-lg shadow-sm p-6">
   <% if @receipts.any? %>
-    <div class="table-wrapper">
-      <table>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
         <thead>
           <tr>
-            <th>#</th>
-            <th>Store</th>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Items</th>
-            <th>Account</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">#</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Store</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Date</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Amount</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Type</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Status</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Items</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Account</th>
           </tr>
         </thead>
         <tbody>
           <% @receipts.each do |receipt| %>
-            <tr>
-              <td><a href="<%= web_receipt_path(receipt) %>"><%= receipt.receipt_number %></a></td>
-              <td><%= receipt.store_name || "—" %></td>
-              <td><%= receipt.transaction_date&.strftime("%b %d, %Y") || "—" %></td>
-              <td><%= format_currency(receipt.total_amount) %></td>
-              <td><%= designation_badge(receipt.designation) %></td>
-              <td><%= status_badge(receipt.status) %></td>
-              <td><%= receipt.expense_lines.size %></td>
-              <td><%= receipt.account&.last4 ? "••••#{receipt.account.last4}" : "—" %></td>
+            <tr class="hover:bg-warm-50 transition-colors">
+              <td class="px-3 py-2.5 border-b border-gray-200"><a href="<%= web_receipt_path(receipt) %>" class="text-warm-600 hover:text-warm-700 font-medium hover:underline"><%= receipt.receipt_number %></a></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.store_name || "—" %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.transaction_date&.strftime("%b %d, %Y") || "—" %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= format_currency(receipt.total_amount) %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= designation_badge(receipt.designation) %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= status_badge(receipt.status) %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.expense_lines.size %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= receipt.account&.last4 ? "••••#{receipt.account.last4}" : "—" %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
   <% else %>
-    <div class="empty-state">
-      <i class="lucide-inbox"></i>
-      <p>No receipts found.</p>
-      <a href="<%= new_web_receipt_path %>" class="btn btn-primary"><i class="lucide-plus"></i> Upload Receipt</a>
+    <div class="text-center py-12 text-gray-400">
+      <i class="lucide-inbox text-5xl text-warm-300 block mb-3"></i>
+      <p class="text-base mb-4">No receipts found.</p>
+      <a href="<%= new_web_receipt_path %>" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-semibold rounded-lg shadow-sm no-underline transition-colors">
+        <i class="lucide-plus"></i> Upload Receipt
+      </a>
     </div>
   <% end %>
 </div>

@@ -1,9 +1,12 @@
-<div class="page-header">
-  <h1 class="page-title"><i class="lucide-bar-chart-3"></i> Summaries</h1>
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-warm-900 flex items-center gap-2.5">
+    <i class="lucide-bar-chart-3 text-warm-500 text-[26px]"></i> Summaries
+  </h1>
   <div>
-    <%= form_with url: web_summaries_path, method: :get, local: true, class: "filter-bar" do %>
-      <label class="form-label" style="margin-right:0.5rem;"><i class="lucide-calendar"></i> Tax Year</label>
-      <select name="tax_year" class="form-select" style="width:auto;display:inline-block;" onchange="this.form.submit()">
+    <%= form_with url: web_summaries_path, method: :get, local: true, class: "flex items-center gap-2" do %>
+      <label class="text-sm font-semibold text-gray-700"><i class="lucide-calendar text-sm"></i> Tax Year</label>
+      <select name="tax_year" class="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-800 focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20" onchange="this.form.submit()">
         <% (Date.current.year).downto(2020).each do |y| %>
           <option value="<%= y %>" <%= 'selected' if y == @tax_year %>><%= y %></option>
         <% end %>
@@ -13,121 +16,149 @@
 </div>
 
 <!-- Schedule C Summary -->
-<div class="card" style="margin-bottom:1.5rem;">
-  <h2 class="card-title"><i class="lucide-file-text"></i> Schedule C Lines</h2>
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+  <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
+    <i class="lucide-file-text text-warm-500"></i> Schedule C Lines
+  </h2>
   <% if @schedule_c[:items].any? %>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Line #</th>
-          <th>Category</th>
-          <th style="text-align:right;">Deduction</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @schedule_c[:items].each do |item| %>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
           <tr>
-            <td><strong>Line <%= item[:line_number] %></strong></td>
-            <td><%= category_label(item[:category]) %></td>
-            <td style="text-align:right;"><%= format_currency(item[:total]) %></td>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Line #</th>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Category</th>
+            <th class="text-right px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Deduction</th>
           </tr>
-        <% end %>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="2"><strong>Grand Total</strong></td>
-          <td style="text-align:right;"><strong><%= format_currency(@schedule_c[:grand_total]) %></strong></td>
-        </tr>
-      </tfoot>
-    </table>
+        </thead>
+        <tbody>
+          <% @schedule_c[:items].each do |item| %>
+            <tr class="hover:bg-warm-50 transition-colors">
+              <td class="px-3 py-2.5 border-b border-gray-200 font-semibold">Line <%= item[:line_number] %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= category_label(item[:category]) %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200 text-right"><%= format_currency(item[:total]) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr class="bg-warm-50">
+            <td colspan="2" class="px-3 py-2.5 font-bold">Grand Total</td>
+            <td class="px-3 py-2.5 text-right font-bold"><%= format_currency(@schedule_c[:grand_total]) %></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
   <% else %>
-    <p class="empty-state"><i class="lucide-info"></i> No confirmed business expenses for <%= @tax_year %>.</p>
+    <div class="text-center py-8 text-gray-400">
+      <i class="lucide-info text-3xl text-warm-300 block mb-2"></i>
+      <p>No confirmed business expenses for <%= @tax_year %>.</p>
+    </div>
   <% end %>
 </div>
 
 <!-- By Category -->
-<div class="card" style="margin-bottom:1.5rem;">
-  <h2 class="card-title"><i class="lucide-tag"></i> By Category</h2>
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+  <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
+    <i class="lucide-tag text-warm-500"></i> By Category
+  </h2>
   <% if @by_category.any? %>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Category</th>
-          <th style="text-align:right;">Items</th>
-          <th style="text-align:right;">Total Cost</th>
-          <th style="text-align:right;">Writeoff</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @by_category.sort_by { |s| -s.total_writeoff.to_f }.each do |s| %>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
           <tr>
-            <td><%= category_label(s.tax_category) %></td>
-            <td style="text-align:right;"><%= s.line_count %></td>
-            <td style="text-align:right;"><%= format_currency(s.total_cost) %></td>
-            <td style="text-align:right;"><strong><%= format_currency(s.total_writeoff) %></strong></td>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Category</th>
+            <th class="text-right px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Items</th>
+            <th class="text-right px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Total Cost</th>
+            <th class="text-right px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Writeoff</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% @by_category.sort_by { |s| -s.total_writeoff.to_f }.each do |s| %>
+            <tr class="hover:bg-warm-50 transition-colors">
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= category_label(s.tax_category) %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200 text-right"><%= s.line_count %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200 text-right"><%= format_currency(s.total_cost) %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200 text-right font-semibold"><%= format_currency(s.total_writeoff) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <% else %>
-    <p class="empty-state"><i class="lucide-info"></i> No categorized expenses yet.</p>
+    <div class="text-center py-8 text-gray-400">
+      <i class="lucide-info text-3xl text-warm-300 block mb-2"></i>
+      <p>No categorized expenses yet.</p>
+    </div>
   <% end %>
 </div>
 
 <!-- By Vendor -->
-<div class="card" style="margin-bottom:1.5rem;">
-  <h2 class="card-title"><i class="lucide-store"></i> By Vendor</h2>
+<div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+  <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
+    <i class="lucide-store text-warm-500"></i> By Vendor
+  </h2>
   <% if @by_vendor.any? %>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Vendor</th>
-          <th style="text-align:right;">Items</th>
-          <th style="text-align:right;">Total Cost</th>
-          <th style="text-align:right;">Writeoff</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @by_vendor.sort_by { |s| -s.total_writeoff.to_f }.each do |s| %>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
           <tr>
-            <td><%= s.store_name %></td>
-            <td style="text-align:right;"><%= s.line_count %></td>
-            <td style="text-align:right;"><%= format_currency(s.total_cost) %></td>
-            <td style="text-align:right;"><strong><%= format_currency(s.total_writeoff) %></strong></td>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Vendor</th>
+            <th class="text-right px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Items</th>
+            <th class="text-right px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Total Cost</th>
+            <th class="text-right px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Writeoff</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% @by_vendor.sort_by { |s| -s.total_writeoff.to_f }.each do |s| %>
+            <tr class="hover:bg-warm-50 transition-colors">
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= s.store_name %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200 text-right"><%= s.line_count %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200 text-right"><%= format_currency(s.total_cost) %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200 text-right font-semibold"><%= format_currency(s.total_writeoff) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <% else %>
-    <p class="empty-state"><i class="lucide-info"></i> No vendor data yet.</p>
+    <div class="text-center py-8 text-gray-400">
+      <i class="lucide-info text-3xl text-warm-300 block mb-2"></i>
+      <p>No vendor data yet.</p>
+    </div>
   <% end %>
 </div>
 
 <!-- By Month -->
-<div class="card">
-  <h2 class="card-title"><i class="lucide-calendar-days"></i> By Month</h2>
+<div class="bg-white rounded-lg shadow-sm p-6">
+  <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
+    <i class="lucide-calendar-days text-warm-500"></i> By Month
+  </h2>
   <% if @by_month.any? %>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Month</th>
-          <th style="text-align:right;">Items</th>
-          <th style="text-align:right;">Total Cost</th>
-          <th style="text-align:right;">Writeoff</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @by_month.each do |s| %>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
           <tr>
-            <td><%= s.month.strftime("%B %Y") %></td>
-            <td style="text-align:right;"><%= s.line_count %></td>
-            <td style="text-align:right;"><%= format_currency(s.total_cost) %></td>
-            <td style="text-align:right;"><strong><%= format_currency(s.total_writeoff) %></strong></td>
+            <th class="text-left px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Month</th>
+            <th class="text-right px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Items</th>
+            <th class="text-right px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Total Cost</th>
+            <th class="text-right px-3 py-2.5 bg-warm-100 text-warm-800 font-semibold text-xs uppercase tracking-wide border-b-2 border-warm-200">Writeoff</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% @by_month.each do |s| %>
+            <tr class="hover:bg-warm-50 transition-colors">
+              <td class="px-3 py-2.5 border-b border-gray-200"><%= s.month.strftime("%B %Y") %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200 text-right"><%= s.line_count %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200 text-right"><%= format_currency(s.total_cost) %></td>
+              <td class="px-3 py-2.5 border-b border-gray-200 text-right font-semibold"><%= format_currency(s.total_writeoff) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <% else %>
-    <p class="empty-state"><i class="lucide-info"></i> No monthly data yet.</p>
+    <div class="text-center py-8 text-gray-400">
+      <i class="lucide-info text-3xl text-warm-300 block mb-2"></i>
+      <p>No monthly data yet.</p>
+    </div>
   <% end %>
 </div>

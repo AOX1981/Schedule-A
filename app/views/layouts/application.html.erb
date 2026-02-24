@@ -8,7 +8,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      corePlugins: { preflight: false },
       theme: {
         extend: {
           colors: {
@@ -26,41 +25,62 @@
   <%= csp_meta_tag %>
   <%= stylesheet_link_tag "application", media: "all" %>
 </head>
-<body>
+<body class="bg-warm-50 text-gray-800 min-h-screen flex flex-col font-sans antialiased">
   <% if logged_in? %>
-    <nav class="navbar">
-      <div class="nav-brand">
-        <i class="lucide-receipt"></i>
-        <a href="<%= web_dashboard_path %>">Schedule A</a>
-      </div>
-      <div class="nav-links">
-        <a href="<%= web_dashboard_path %>" class="nav-link"><i class="lucide-layout-dashboard"></i> Dashboard</a>
-        <a href="<%= web_receipts_path %>" class="nav-link"><i class="lucide-file-text"></i> Receipts</a>
-        <a href="<%= web_summaries_path %>" class="nav-link"><i class="lucide-bar-chart-3"></i> Summaries</a>
-        <a href="<%= web_exports_path %>" class="nav-link"><i class="lucide-download"></i> Export</a>
-        <a href="<%= web_settings_path %>" class="nav-link"><i class="lucide-settings"></i> Settings</a>
-      </div>
-      <div class="nav-user">
-        <span class="nav-username"><i class="lucide-user"></i> <%= current_user.full_name %></span>
-        <%= link_to logout_path, data: { turbo_method: :delete }, class: "nav-link logout-link" do %>
-          <i class="lucide-log-out"></i> Log out
-        <% end %>
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-warm-800 text-white shadow-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center h-14">
+        <a href="<%= web_dashboard_path %>" class="flex items-center gap-2 text-warm-200 hover:text-white font-bold text-lg mr-8 no-underline">
+          <i class="lucide-receipt text-warm-300 text-xl"></i> Schedule A
+        </a>
+        <div class="flex items-center gap-1 flex-1 overflow-x-auto">
+          <a href="<%= web_dashboard_path %>" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-warm-200 hover:bg-warm-700 hover:text-white text-sm font-medium no-underline transition-colors">
+            <i class="lucide-layout-dashboard text-sm"></i> Dashboard
+          </a>
+          <a href="<%= web_receipts_path %>" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-warm-200 hover:bg-warm-700 hover:text-white text-sm font-medium no-underline transition-colors">
+            <i class="lucide-file-text text-sm"></i> Receipts
+          </a>
+          <a href="<%= web_summaries_path %>" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-warm-200 hover:bg-warm-700 hover:text-white text-sm font-medium no-underline transition-colors">
+            <i class="lucide-bar-chart-3 text-sm"></i> Summaries
+          </a>
+          <a href="<%= web_exports_path %>" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-warm-200 hover:bg-warm-700 hover:text-white text-sm font-medium no-underline transition-colors">
+            <i class="lucide-download text-sm"></i> Export
+          </a>
+          <a href="<%= web_settings_path %>" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-warm-200 hover:bg-warm-700 hover:text-white text-sm font-medium no-underline transition-colors">
+            <i class="lucide-settings text-sm"></i> Settings
+          </a>
+        </div>
+        <div class="flex items-center gap-4 ml-auto">
+          <span class="text-warm-200 text-sm flex items-center gap-1.5"><i class="lucide-user text-sm"></i> <%= current_user.full_name %></span>
+          <%= link_to logout_path, data: { turbo_method: :delete }, class: "flex items-center gap-1.5 text-warm-300 hover:text-red-400 text-sm font-medium no-underline transition-colors" do %>
+            <i class="lucide-log-out text-sm"></i> Log out
+          <% end %>
+        </div>
       </div>
     </nav>
-  <% end %>
 
-  <% if logged_in? %>
-    <main class="main-content">
+    <!-- Main Content -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-7">
       <% if flash[:notice] %>
-        <div class="flash flash-notice"><i class="lucide-check-circle"></i> <%= flash[:notice] %></div>
+        <div class="flex items-center gap-2.5 bg-green-50 text-green-800 text-sm font-medium px-4 py-3 rounded-lg mb-5">
+          <i class="lucide-check-circle"></i> <%= flash[:notice] %>
+        </div>
       <% end %>
       <% if flash[:alert] %>
-        <div class="flash flash-alert"><i class="lucide-alert-circle"></i> <%= flash[:alert] %></div>
+        <div class="flex items-center gap-2.5 bg-red-50 text-red-800 text-sm font-medium px-4 py-3 rounded-lg mb-5">
+          <i class="lucide-alert-circle"></i> <%= flash[:alert] %>
+        </div>
       <% end %>
       <%= yield %>
     </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-5 text-gray-400 text-sm border-t border-gray-200 mt-auto">
+      <p>Schedule A &mdash; Tax Deduction Tracker &copy; <%= Date.current.year %></p>
+    </footer>
   <% else %>
-    <main class="min-h-screen flex flex-col items-center justify-center px-4 py-12" style="background: var(--warm-50);">
+    <!-- Auth Layout -->
+    <main class="flex-1 flex flex-col items-center justify-center px-4 py-12">
       <div class="w-full max-w-[420px]">
         <% if flash[:notice] %>
           <div class="flex items-center gap-2 bg-green-50 text-green-800 text-sm font-medium px-4 py-3 rounded-lg mb-4">
@@ -75,12 +95,6 @@
         <%= yield %>
       </div>
     </main>
-  <% end %>
-
-  <% if logged_in? %>
-    <footer class="footer">
-      <p>Schedule A &mdash; Tax Deduction Tracker &copy; <%= Date.current.year %></p>
-    </footer>
   <% end %>
 </body>
 </html>

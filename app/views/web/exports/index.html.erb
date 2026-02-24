@@ -1,11 +1,17 @@
-<div class="page-header">
-  <h1 class="page-title"><i class="lucide-download"></i> Export</h1>
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold text-warm-900 flex items-center gap-2.5">
+    <i class="lucide-download text-warm-500 text-[26px]"></i> Export
+  </h1>
 </div>
 
-<div class="card" style="margin-bottom:1.5rem;">
-  <h2 class="card-title"><i class="lucide-calendar"></i> Select Tax Year</h2>
-  <form id="tax-year-form" class="filter-bar" style="margin-bottom:0;">
-    <select id="tax-year-select" class="form-select" style="width:auto;display:inline-block;">
+<!-- Tax Year Selector -->
+<div class="bg-white rounded-lg shadow-sm px-4 py-3 mb-6">
+  <form id="tax-year-form" class="flex items-center gap-2">
+    <h2 class="text-sm font-bold text-gray-800 flex items-center gap-1.5">
+      <i class="lucide-calendar text-warm-500 text-sm"></i> Tax Year
+    </h2>
+    <select id="tax-year-select" class="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white text-gray-800 focus:outline-none focus:border-warm-400 focus:ring-2 focus:ring-warm-400/20">
       <% (Date.current.year).downto(2020).each do |y| %>
         <option value="<%= y %>" <%= 'selected' if y == @tax_year %>><%= y %></option>
       <% end %>
@@ -13,46 +19,47 @@
   </form>
 </div>
 
-<div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+<!-- Export Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
   <!-- Schedule C CSV -->
-  <div class="card" style="text-align:center;padding:2rem;">
-    <div style="font-size:2.5rem;color:var(--warm-600);margin-bottom:1rem;">
+  <div class="bg-white rounded-lg shadow-sm p-8 text-center">
+    <div class="text-5xl text-warm-600 mb-4">
       <i class="lucide-file-spreadsheet"></i>
     </div>
-    <h3 style="margin-bottom:0.5rem;">Schedule C (CSV)</h3>
-    <p style="color:var(--warm-500);margin-bottom:1.5rem;font-size:0.9rem;">
+    <h3 class="text-lg font-bold text-gray-800 mb-2">Schedule C (CSV)</h3>
+    <p class="text-gray-500 text-sm mb-6">
       Category totals mapped to Schedule C line numbers. Import into your tax software.
     </p>
-    <a id="export-csv" href="<%= web_export_schedule_c_csv_path(tax_year: @tax_year) %>" class="btn btn-primary">
-      <i class="lucide-download"></i> Download CSV
+    <a id="export-csv" href="<%= web_export_schedule_c_csv_path(tax_year: @tax_year) %>" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-semibold rounded-lg shadow-sm no-underline transition-colors">
+      <i class="lucide-download text-sm"></i> Download CSV
     </a>
   </div>
 
   <!-- Schedule C PDF -->
-  <div class="card" style="text-align:center;padding:2rem;">
-    <div style="font-size:2.5rem;color:var(--warm-600);margin-bottom:1rem;">
+  <div class="bg-white rounded-lg shadow-sm p-8 text-center">
+    <div class="text-5xl text-warm-600 mb-4">
       <i class="lucide-file-text"></i>
     </div>
-    <h3 style="margin-bottom:0.5rem;">Schedule C (PDF)</h3>
-    <p style="color:var(--warm-500);margin-bottom:1.5rem;font-size:0.9rem;">
+    <h3 class="text-lg font-bold text-gray-800 mb-2">Schedule C (PDF)</h3>
+    <p class="text-gray-500 text-sm mb-6">
       Formatted PDF report with your business info and deduction totals by category.
     </p>
-    <a id="export-pdf" href="<%= web_export_schedule_c_pdf_path(tax_year: @tax_year) %>" class="btn btn-primary">
-      <i class="lucide-download"></i> Download PDF
+    <a id="export-pdf" href="<%= web_export_schedule_c_pdf_path(tax_year: @tax_year) %>" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-semibold rounded-lg shadow-sm no-underline transition-colors">
+      <i class="lucide-download text-sm"></i> Download PDF
     </a>
   </div>
 
   <!-- Expense Lines CSV -->
-  <div class="card" style="text-align:center;padding:2rem;">
-    <div style="font-size:2.5rem;color:var(--warm-600);margin-bottom:1rem;">
+  <div class="bg-white rounded-lg shadow-sm p-8 text-center">
+    <div class="text-5xl text-warm-600 mb-4">
       <i class="lucide-table"></i>
     </div>
-    <h3 style="margin-bottom:0.5rem;">Expense Lines (CSV)</h3>
-    <p style="color:var(--warm-500);margin-bottom:1.5rem;font-size:0.9rem;">
+    <h3 class="text-lg font-bold text-gray-800 mb-2">Expense Lines (CSV)</h3>
+    <p class="text-gray-500 text-sm mb-6">
       Full detail of every confirmed business expense line. Great for record-keeping.
     </p>
-    <a id="export-lines" href="<%= web_export_expense_lines_csv_path(tax_year: @tax_year) %>" class="btn btn-primary">
-      <i class="lucide-download"></i> Download CSV
+    <a id="export-lines" href="<%= web_export_expense_lines_csv_path(tax_year: @tax_year) %>" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-warm-600 hover:bg-warm-700 text-white text-sm font-semibold rounded-lg shadow-sm no-underline transition-colors">
+      <i class="lucide-download text-sm"></i> Download CSV
     </a>
   </div>
 </div>
