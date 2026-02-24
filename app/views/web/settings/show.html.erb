@@ -1,0 +1,93 @@
+<div class="page-header">
+  <h1 class="page-title"><i class="lucide-settings"></i> Settings</h1>
+</div>
+
+<!-- Business Profiles -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title"><i class="lucide-briefcase"></i> Business Profiles</h2>
+    <a href="<%= new_web_business_profile_path %>" class="btn btn-primary btn-sm"><i class="lucide-plus"></i> Add Profile</a>
+  </div>
+
+  <% if @profiles.any? %>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Business Name</th>
+            <th>EIN</th>
+            <th>Type</th>
+            <th>Tax Year</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @profiles.each do |profile| %>
+            <tr>
+              <td><%= profile.business_name %></td>
+              <td><%= profile.ein || "—" %></td>
+              <td><%= profile.business_type.titleize %></td>
+              <td><%= profile.tax_year %></td>
+              <td style="white-space:nowrap;">
+                <a href="<%= edit_web_business_profile_path(profile) %>" class="btn btn-secondary btn-sm"><i class="lucide-edit"></i></a>
+                <%= link_to web_business_profile_path(profile), method: :delete, class: "btn btn-danger btn-sm", data: { turbo_method: :delete, turbo_confirm: "Delete this business profile?" } do %>
+                  <i class="lucide-trash-2"></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <i class="lucide-briefcase"></i>
+      <p>No business profiles yet.</p>
+      <a href="<%= new_web_business_profile_path %>" class="btn btn-primary btn-sm"><i class="lucide-plus"></i> Add Profile</a>
+    </div>
+  <% end %>
+</div>
+
+<!-- Accounts -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title"><i class="lucide-credit-card"></i> Payment Accounts</h2>
+    <a href="<%= new_web_account_path %>" class="btn btn-primary btn-sm"><i class="lucide-plus"></i> Add Account</a>
+  </div>
+
+  <% if @accounts.any? %>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Nickname</th>
+            <th>Last 4</th>
+            <th>Type</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @accounts.each do |acct| %>
+            <tr>
+              <td><%= acct.nickname %></td>
+              <td>••••<%= acct.last4 %></td>
+              <td><%= acct.account_type.titleize %></td>
+              <td style="white-space:nowrap;">
+                <a href="<%= edit_web_account_path(acct) %>" class="btn btn-secondary btn-sm"><i class="lucide-edit"></i></a>
+                <%= link_to web_account_path(acct), method: :delete, class: "btn btn-danger btn-sm", data: { turbo_method: :delete, turbo_confirm: "Remove this account?" } do %>
+                  <i class="lucide-trash-2"></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <i class="lucide-credit-card"></i>
+      <p>No accounts yet.</p>
+      <a href="<%= new_web_account_path %>" class="btn btn-primary btn-sm"><i class="lucide-plus"></i> Add Account</a>
+    </div>
+  <% end %>
+</div>

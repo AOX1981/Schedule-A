@@ -1,0 +1,20 @@
+<div class="page-header">
+  <h1 class="page-title"><i class="lucide-upload"></i> Upload Receipt</h1>
+</div>
+
+<div class="card">
+  <%= form_with model: @receipt, url: web_receipts_path, method: :post, local: true, multipart: true do |f| %>
+    <div class="form-group">
+      <label class="form-label"><i class="lucide-image"></i> Receipt Image / PDF</label>
+      <%= f.file_field :image, class: "form-input", accept: "image/*,application/pdf" %>
+      <p class="form-hint">Upload a photo or PDF of your receipt. OCR will attempt to extract details automatically.</p>
+    </div>
+
+    <%= render "form", f: f, receipt: @receipt %>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary"><i class="lucide-upload"></i> Upload Receipt</button>
+      <a href="<%= web_receipts_path %>" class="btn btn-secondary"><i class="lucide-x"></i> Cancel</a>
+    </div>
+  <% end %>
+</div>

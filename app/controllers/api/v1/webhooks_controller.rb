@@ -1,12 +1,11 @@
 module Api
   module V1
     class WebhooksController < ApplicationController
-      skip_before_action :verify_authenticity_token, raise: false
+      protect_from_forgery with: :null_session
 
       def inbound_email
         sender = params[:from] || params[:sender]
         subject = params[:subject]
-        body = params[:text] || params[:html]
 
         user = User.find_by(email: extract_email(sender))
         unless user

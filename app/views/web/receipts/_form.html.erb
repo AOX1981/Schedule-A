@@ -1,0 +1,58 @@
+<% if receipt.errors.any? %>
+  <div class="form-errors">
+    <strong>Please fix the following:</strong>
+    <ul>
+      <% receipt.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="form-row">
+  <div class="form-group">
+    <label class="form-label"><i class="lucide-store"></i> Store Name</label>
+    <%= f.text_field :store_name, class: "form-input", placeholder: "e.g. Office Depot" %>
+  </div>
+  <div class="form-group">
+    <label class="form-label"><i class="lucide-calendar"></i> Date</label>
+    <%= f.date_field :transaction_date, class: "form-input" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label class="form-label"><i class="lucide-map-pin"></i> City</label>
+    <%= f.text_field :city, class: "form-input", placeholder: "e.g. Austin" %>
+  </div>
+  <div class="form-group">
+    <label class="form-label"><i class="lucide-map"></i> State</label>
+    <%= f.text_field :state, class: "form-input", placeholder: "e.g. TX" %>
+  </div>
+  <div class="form-group">
+    <label class="form-label"><i class="lucide-clock"></i> Time</label>
+    <%= f.text_field :transaction_time, class: "form-input", placeholder: "14:30" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label class="form-label"><i class="lucide-dollar-sign"></i> Total Amount</label>
+    <%= f.number_field :total_amount, class: "form-input", step: "0.01", min: "0", placeholder: "0.00" %>
+  </div>
+  <div class="form-group">
+    <label class="form-label"><i class="lucide-tag"></i> Designation</label>
+    <%= f.select :designation, [["Business", "business"], ["Personal", "personal"]], {}, class: "form-select" %>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="form-group">
+    <label class="form-label"><i class="lucide-briefcase"></i> Business Profile</label>
+    <%= f.collection_select :business_profile_id, current_user.business_profiles.order(:business_name), :id, :business_name, { include_blank: "— Select —" }, class: "form-select" %>
+  </div>
+  <div class="form-group">
+    <label class="form-label"><i class="lucide-credit-card"></i> Account</label>
+    <%= f.collection_select :account_id, current_user.accounts.order(:nickname), :id, proc { |a| "#{a.nickname} (••••#{a.last4})" }, { include_blank: "— Select —" }, class: "form-select" %>
+  </div>
+</div>

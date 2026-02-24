@@ -1,0 +1,139 @@
+<div class="page-header">
+  <h1 class="page-title"><i class="lucide-file-text"></i> Receipt #<%= @receipt.receipt_number %></h1>
+  <div style="display:flex; gap:8px;">
+    <% if @receipt.status != "confirmed" %>
+      <%= link_to confirm_web_receipt_path(@receipt), method: :post, class: "btn btn-success btn-sm", data: { turbo_method: :post } do %>
+        <i class="lucide-check-circle"></i> Confirm
+      <% end %>
+    <% end %>
+    <a href="<%= edit_web_receipt_path(@receipt) %>" class="btn btn-secondary btn-sm"><i class="lucide-edit"></i> Edit</a>
+    <%= link_to web_receipt_path(@receipt), method: :delete, class: "btn btn-danger btn-sm", data: { turbo_method: :delete, turbo_confirm: "Delete this receipt and all its expense lines?" } do %>
+      <i class="lucide-trash-2"></i> Delete
+    <% end %>
+  </div>
+</div>
+
+<div class="card">
+  <div class="receipt-meta">
+    <div class="meta-item">
+      <div class="meta-label">Store</div>
+      <div class="meta-value"><%= @receipt.store_name || "—" %></div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Date</div>
+      <div class="meta-value"><%= @receipt.transaction_date&.strftime("%B %d, %Y") || "—" %></div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Time</div>
+      <div class="meta-value"><%= @receipt.transaction_time || "—" %></div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Total</div>
+      <div class="meta-value"><%= format_currency(@receipt.total_amount) %></div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Location</div>
+      <div class="meta-value"><%= [@receipt.city, @receipt.state].compact.join(", ").presence || "—" %></div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Account</div>
+      <div class="meta-value"><%= @receipt.account ? "#{@receipt.account.nickname} (••••#{@receipt.account.last4})" : "—" %></div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Status</div>
+      <div class="meta-value"><%= status_badge(@receipt.status) %></div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Type</div>
+      <div class="meta-value"><%= designation_badge(@receipt.designation) %></div>
+    </div>
+  </div>
+
+  <% if @receipt.image.attached? %>
+    <div style="margin-top: 12px;">
+      <div class="meta-label" style="margin-bottom: 8px;">Receipt Image</div>
+      <% if @receipt.image.content_type.start_with?("image/") %>
+        <%= image_tag rails_blob_path(@receipt.image, only_path: true), style: "max-width: 400px; border-radius: 8px; border: 1px solid var(--gray-200);" %>
+      <% else %>
+        <a href="<%= rails_blob_path(@receipt.image, only_path: true) %>" class="btn btn-secondary btn-sm" target="_blank">
+          <i class="lucide-file"></i> View PDF
+        </a>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<!-- Expense Lines -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title"><i class="lucide-list"></i> Expense Lines</h2>
+  </div>
+
+  <% if @expense_lines.any? %>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Item</th>
+            <th>Cost</th>
+            <th>Category</th>
+            <th>Write-off %</th>
+            <th>Write-off $</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @expense_lines.each do |line| %>
+            <tr>
+              <td><%= line.transaction_display_id %></td>
+              <td><%= line.item %></td>
+              <td><%= format_currency(line.cost) %></td>
+              <td><%= category_label(line.tax_category) %></td>
+              <td><%= line.writeoff_percent %>%</td>
+              <td><%= format_currency(line.writeoff_value) %></td>
+              <td style="white-space:nowrap;">
+                <a href="<%= edit_web_receipt_expense_line_path(@receipt, line) %>" class="btn btn-secondary btn-sm"><i class="lucide-edit"></i></a>
+                <%= link_to web_receipt_expense_line_path(@receipt, line), method: :delete, class: "btn btn-danger btn-sm", data: { turbo_method: :delete, turbo_confirm: "Remove this expense line?" } do %>
+                  <i class="lucide-trash-2"></i>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p style="color: var(--gray-400); padding: 12px 0;">No expense lines yet. Add one below.</p>
+  <% end %>
+
+  <!-- Add Expense Line Form -->
+  <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--gray-200);">
+    <h3 style="font-size: 15px; font-weight: 600; color: var(--gray-700); margin-bottom: 12px;">
+      <i class="lucide-plus-circle" style="color: var(--warm-500);"></i> Add Expense Line
+    </h3>
+    <%= form_with model: @new_expense_line, url: web_receipt_expense_lines_path(@receipt), method: :post, local: true do |f| %>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Item</label>
+          <%= f.text_field :item, class: "form-input", placeholder: "e.g. Printer Paper", required: true %>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cost</label>
+          <%= f.number_field :cost, class: "form-input", step: "0.01", min: "0", placeholder: "0.00", required: true %>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tax Category</label>
+          <%= f.select :tax_category, ExpenseLine::SCHEDULE_C_CATEGORIES.keys.map { |k| [k.titleize, k] }, { include_blank: "— Select —" }, class: "form-select" %>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Write-off %</label>
+          <%= f.number_field :writeoff_percent, class: "form-input", value: 100, min: 0, max: 100, step: "0.01" %>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-sm"><i class="lucide-plus"></i> Add Line</button>
+    <% end %>
+  </div>
+</div>

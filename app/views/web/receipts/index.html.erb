@@ -1,0 +1,65 @@
+<div class="page-header">
+  <h1 class="page-title"><i class="lucide-file-text"></i> Receipts</h1>
+  <a href="<%= new_web_receipt_path %>" class="btn btn-primary"><i class="lucide-plus"></i> Upload Receipt</a>
+</div>
+
+<div class="card" style="margin-bottom: 16px; padding: 12px 16px;">
+  <%= form_with url: web_receipts_path, method: :get, local: true, style: "display:flex; gap:12px; align-items:center; flex-wrap:wrap;" do %>
+    <select name="status" class="form-select" style="width:auto;">
+      <option value="">All Statuses</option>
+      <% %w[pending extracted confirmed].each do |s| %>
+        <option value="<%= s %>" <%= 'selected' if params[:status] == s %>><%= s.capitalize %></option>
+      <% end %>
+    </select>
+    <select name="designation" class="form-select" style="width:auto;">
+      <option value="">All Types</option>
+      <option value="business" <%= 'selected' if params[:designation] == 'business' %>>Business</option>
+      <option value="personal" <%= 'selected' if params[:designation] == 'personal' %>>Personal</option>
+    </select>
+    <button type="submit" class="btn btn-secondary btn-sm"><i class="lucide-filter"></i> Filter</button>
+    <% if params[:status].present? || params[:designation].present? %>
+      <a href="<%= web_receipts_path %>" class="btn btn-secondary btn-sm"><i class="lucide-x"></i> Clear</a>
+    <% end %>
+  <% end %>
+</div>
+
+<div class="card">
+  <% if @receipts.any? %>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Store</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Items</th>
+            <th>Account</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @receipts.each do |receipt| %>
+            <tr>
+              <td><a href="<%= web_receipt_path(receipt) %>"><%= receipt.receipt_number %></a></td>
+              <td><%= receipt.store_name || "—" %></td>
+              <td><%= receipt.transaction_date&.strftime("%b %d, %Y") || "—" %></td>
+              <td><%= format_currency(receipt.total_amount) %></td>
+              <td><%= designation_badge(receipt.designation) %></td>
+              <td><%= status_badge(receipt.status) %></td>
+              <td><%= receipt.expense_lines.size %></td>
+              <td><%= receipt.account&.last4 ? "••••#{receipt.account.last4}" : "—" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <i class="lucide-inbox"></i>
+      <p>No receipts found.</p>
+      <a href="<%= new_web_receipt_path %>" class="btn btn-primary"><i class="lucide-plus"></i> Upload Receipt</a>
+    </div>
+  <% end %>
+</div>

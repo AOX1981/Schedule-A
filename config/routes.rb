@@ -1,6 +1,38 @@
 Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
+  # Web auth routes
+  get "login", to: "web/sessions#new", as: :login
+  post "login", to: "web/sessions#create"
+  delete "logout", to: "web/sessions#destroy", as: :logout
+  get "register", to: "web/registrations#new", as: :register
+  post "register", to: "web/registrations#create"
+
+  # Web UI routes
+  namespace :web, path: "" do
+    get "dashboard", to: "dashboard#show", as: :dashboard
+    root "dashboard#show"
+
+    resources :receipts do
+      member do
+        post :confirm
+      end
+      resources :expense_lines, only: [:new, :create, :edit, :update, :destroy]
+    end
+
+    resources :business_profiles, only: [:new, :create, :edit, :update, :destroy]
+    resources :accounts, only: [:new, :create, :edit, :update, :destroy]
+
+    get "settings", to: "settings#show", as: :settings
+
+    get "summaries", to: "summaries#index", as: :summaries
+
+    get "exports", to: "exports#index", as: :exports
+    get "exports/schedule_c_csv", to: "exports#schedule_c_csv", as: :export_schedule_c_csv
+    get "exports/schedule_c_pdf", to: "exports#schedule_c_pdf", as: :export_schedule_c_pdf
+    get "exports/expense_lines_csv", to: "exports#expense_lines_csv", as: :export_expense_lines_csv
+  end
+
   namespace :api do
     namespace :v1 do
       # Auth

@@ -1,0 +1,70 @@
+<div class="page-header">
+  <h1 class="page-title"><i class="lucide-download"></i> Export</h1>
+</div>
+
+<div class="card" style="margin-bottom:1.5rem;">
+  <h2 class="card-title"><i class="lucide-calendar"></i> Select Tax Year</h2>
+  <form id="tax-year-form" class="filter-bar" style="margin-bottom:0;">
+    <select id="tax-year-select" class="form-select" style="width:auto;display:inline-block;">
+      <% (Date.current.year).downto(2020).each do |y| %>
+        <option value="<%= y %>" <%= 'selected' if y == @tax_year %>><%= y %></option>
+      <% end %>
+    </select>
+  </form>
+</div>
+
+<div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+  <!-- Schedule C CSV -->
+  <div class="card" style="text-align:center;padding:2rem;">
+    <div style="font-size:2.5rem;color:var(--warm-600);margin-bottom:1rem;">
+      <i class="lucide-file-spreadsheet"></i>
+    </div>
+    <h3 style="margin-bottom:0.5rem;">Schedule C (CSV)</h3>
+    <p style="color:var(--warm-500);margin-bottom:1.5rem;font-size:0.9rem;">
+      Category totals mapped to Schedule C line numbers. Import into your tax software.
+    </p>
+    <a id="export-csv" href="<%= web_export_schedule_c_csv_path(tax_year: @tax_year) %>" class="btn btn-primary">
+      <i class="lucide-download"></i> Download CSV
+    </a>
+  </div>
+
+  <!-- Schedule C PDF -->
+  <div class="card" style="text-align:center;padding:2rem;">
+    <div style="font-size:2.5rem;color:var(--warm-600);margin-bottom:1rem;">
+      <i class="lucide-file-text"></i>
+    </div>
+    <h3 style="margin-bottom:0.5rem;">Schedule C (PDF)</h3>
+    <p style="color:var(--warm-500);margin-bottom:1.5rem;font-size:0.9rem;">
+      Formatted PDF report with your business info and deduction totals by category.
+    </p>
+    <a id="export-pdf" href="<%= web_export_schedule_c_pdf_path(tax_year: @tax_year) %>" class="btn btn-primary">
+      <i class="lucide-download"></i> Download PDF
+    </a>
+  </div>
+
+  <!-- Expense Lines CSV -->
+  <div class="card" style="text-align:center;padding:2rem;">
+    <div style="font-size:2.5rem;color:var(--warm-600);margin-bottom:1rem;">
+      <i class="lucide-table"></i>
+    </div>
+    <h3 style="margin-bottom:0.5rem;">Expense Lines (CSV)</h3>
+    <p style="color:var(--warm-500);margin-bottom:1.5rem;font-size:0.9rem;">
+      Full detail of every confirmed business expense line. Great for record-keeping.
+    </p>
+    <a id="export-lines" href="<%= web_export_expense_lines_csv_path(tax_year: @tax_year) %>" class="btn btn-primary">
+      <i class="lucide-download"></i> Download CSV
+    </a>
+  </div>
+</div>
+
+<script>
+  document.getElementById('tax-year-select').addEventListener('change', function() {
+    var year = this.value;
+    var csvLink = document.getElementById('export-csv');
+    var pdfLink = document.getElementById('export-pdf');
+    var linesLink = document.getElementById('export-lines');
+    csvLink.href = csvLink.href.replace(/tax_year=\d+/, 'tax_year=' + year);
+    pdfLink.href = pdfLink.href.replace(/tax_year=\d+/, 'tax_year=' + year);
+    linesLink.href = linesLink.href.replace(/tax_year=\d+/, 'tax_year=' + year);
+  });
+</script>

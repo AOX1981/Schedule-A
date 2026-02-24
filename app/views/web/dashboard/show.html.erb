@@ -1,0 +1,80 @@
+<div class="page-header">
+  <h1 class="page-title"><i class="lucide-layout-dashboard"></i> Dashboard</h1>
+  <a href="<%= new_web_receipt_path %>" class="btn btn-primary"><i class="lucide-plus"></i> New Receipt</a>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-warm"><i class="lucide-file-text"></i></div>
+    <div>
+      <div class="stat-label">Total Receipts</div>
+      <div class="stat-value"><%= @total_receipts %></div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-blue"><i class="lucide-clock"></i></div>
+    <div>
+      <div class="stat-label">Pending Review</div>
+      <div class="stat-value"><%= @pending_count %></div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-green"><i class="lucide-calculator"></i></div>
+    <div>
+      <div class="stat-label">Total Deductions</div>
+      <div class="stat-value"><%= format_currency(@total_deductions) %></div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon stat-icon-warm"><i class="lucide-list"></i></div>
+    <div>
+      <div class="stat-label">Expense Lines</div>
+      <div class="stat-value"><%= @expense_count %></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title"><i class="lucide-history"></i> Recent Receipts</h2>
+    <a href="<%= web_receipts_path %>" class="btn btn-secondary btn-sm"><i class="lucide-arrow-right"></i> View All</a>
+  </div>
+
+  <% if @recent_receipts.any? %>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Store</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Items</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recent_receipts.each do |receipt| %>
+            <tr>
+              <td><a href="<%= web_receipt_path(receipt) %>"><%= receipt.receipt_number %></a></td>
+              <td><%= receipt.store_name || "—" %></td>
+              <td><%= receipt.transaction_date&.strftime("%b %d, %Y") || "—" %></td>
+              <td><%= format_currency(receipt.total_amount) %></td>
+              <td><%= status_badge(receipt.status) %></td>
+              <td><%= receipt.expense_lines.size %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <i class="lucide-inbox"></i>
+      <p>No receipts yet. Upload your first receipt to get started!</p>
+      <a href="<%= new_web_receipt_path %>" class="btn btn-primary"><i class="lucide-plus"></i> Upload Receipt</a>
+    </div>
+  <% end %>
+</div>

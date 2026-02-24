@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Schedule A — Tax Deduction Tracker</title>
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", media: "all" %>
+</head>
+<body>
+  <% if logged_in? %>
+    <nav class="navbar">
+      <div class="nav-brand">
+        <i class="lucide-receipt"></i>
+        <a href="<%= web_dashboard_path %>">Schedule A</a>
+      </div>
+      <div class="nav-links">
+        <a href="<%= web_dashboard_path %>" class="nav-link"><i class="lucide-layout-dashboard"></i> Dashboard</a>
+        <a href="<%= web_receipts_path %>" class="nav-link"><i class="lucide-file-text"></i> Receipts</a>
+        <a href="<%= web_summaries_path %>" class="nav-link"><i class="lucide-bar-chart-3"></i> Summaries</a>
+        <a href="<%= web_exports_path %>" class="nav-link"><i class="lucide-download"></i> Export</a>
+        <a href="<%= web_settings_path %>" class="nav-link"><i class="lucide-settings"></i> Settings</a>
+      </div>
+      <div class="nav-user">
+        <span class="nav-username"><i class="lucide-user"></i> <%= current_user.full_name %></span>
+        <%= link_to logout_path, data: { turbo_method: :delete }, class: "nav-link logout-link" do %>
+          <i class="lucide-log-out"></i> Log out
+        <% end %>
+      </div>
+    </nav>
+  <% end %>
+
+  <main class="<%= logged_in? ? 'main-content' : 'main-content-full' %>">
+    <% if flash[:notice] %>
+      <div class="flash flash-notice"><i class="lucide-check-circle"></i> <%= flash[:notice] %></div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div class="flash flash-alert"><i class="lucide-alert-circle"></i> <%= flash[:alert] %></div>
+    <% end %>
+
+    <%= yield %>
+  </main>
+
+  <% if logged_in? %>
+    <footer class="footer">
+      <p>Schedule A &mdash; Tax Deduction Tracker &copy; <%= Date.current.year %></p>
+    </footer>
+  <% end %>
+</body>
+</html>

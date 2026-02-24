@@ -1,7 +1,7 @@
 module Api
   module V1
     class AuthController < ApplicationController
-      skip_before_action :verify_authenticity_token, raise: false
+      protect_from_forgery with: :null_session
 
       def register
         user = User.new(register_params)

@@ -19,8 +19,6 @@ module ScheduleA
 
     config.autoload_lib(ignore: %w[assets tasks])
 
-    config.api_only = true
-
     # UUID primary keys
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid

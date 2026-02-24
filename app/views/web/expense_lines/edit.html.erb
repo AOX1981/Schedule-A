@@ -1,0 +1,43 @@
+<div class="page-header">
+  <h1 class="page-title"><i class="lucide-edit"></i> Edit Expense Line <%= @expense_line.transaction_display_id %></h1>
+</div>
+
+<div class="card">
+  <% if @expense_line.errors.any? %>
+    <div class="form-errors">
+      <strong>Please fix the following:</strong>
+      <ul>
+        <% @expense_line.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: @expense_line, url: web_receipt_expense_line_path(@receipt, @expense_line), method: :patch, local: true do |f| %>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Item</label>
+        <%= f.text_field :item, class: "form-input", required: true %>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cost</label>
+        <%= f.number_field :cost, class: "form-input", step: "0.01", min: "0", required: true %>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Tax Category</label>
+        <%= f.select :tax_category, ExpenseLine::SCHEDULE_C_CATEGORIES.keys.map { |k| [k.titleize, k] }, { include_blank: "— None —" }, class: "form-select" %>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Write-off %</label>
+        <%= f.number_field :writeoff_percent, class: "form-input", min: 0, max: 100, step: "0.01" %>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary"><i class="lucide-save"></i> Save</button>
+      <a href="<%= web_receipt_path(@receipt) %>" class="btn btn-secondary"><i class="lucide-x"></i> Cancel</a>
+    </div>
+  <% end %>
+</div>
