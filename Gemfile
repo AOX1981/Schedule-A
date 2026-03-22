@@ -5,7 +5,7 @@ gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 
 # Auth
-gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.22"
 
 # CORS
 gem "rack-cors"
